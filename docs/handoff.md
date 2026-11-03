@@ -1,16 +1,20 @@
-# Handoff: Little Pairs memory game
+# Handoff: Little Pairs
 
-The workspace contains a small browser-based memory game in `codex-memory-workshop/` and workshop instructions in `worksheet.html`. The game requires no installation or build step: open `codex-memory-workshop/index.html` in a browser.
+## Run and project instructions
 
-The main files are:
+Open `index.html` in a browser; no installation, build, or server is needed. `index.html` defines the page, `styles.css` controls appearance, and `game.js` handles gameplay. Follow `AGENTS.md`: keep changes focused, agree on feature behavior and acceptance checks, and write all new player-facing text in Norwegian Bokmål while leaving existing text unchanged.
 
-- `index.html`: page structure, New game button, counters, status message, and board container.
-- `styles.css`: visual design, card states, four-column board, and adjustments for small screens.
-- `game.js`: card creation, shuffling, turn handling, counters, and restarting.
-- `README.md`: basic usage instructions.
+## Current implementation
 
-In `game.js`, `startGame()` resets the state and builds twelve cards containing six pairs. `shuffledCards()` randomizes their order, and `createCard()` creates each clickable button. `revealCard()` reveals cards and counts one move when the second card is selected. Matching cards remain visible and become disabled. Mismatches remain visible for 900 milliseconds while further card selection is blocked. `resetTurn()` clears the selections and unlocks play.
+- Twelve cards contain six shuffled pairs. `revealCard()` counts a move when the second distinct eligible card is selected. Matches remain visible and disabled; mismatches lock selection for 900ms. `startGame()` resets the board and counters.
+- Best score is the fewest moves in a completed game. Only a strictly better result updates `little-pairs-best-score` in localStorage. “Beste resultat: –” appears before a record exists; otherwise “Beste resultat: N trekk” is shown. The record survives refresh and New game. Invalid stored values are ignored; unavailable storage falls back to keeping the record for the current page session.
+- `updateMoveFeedback()` makes the page background orange (`#ffcc80`) from 16 moves and displays “Dette begynner å ta tid...” in a separate, non-blocking status field from 18 moves. Both remain through completion and reset on New game or refresh. Existing gameplay messages remain visible.
+- The previously confirmed restart bug has been fixed in the current code: `mismatchTimeoutId` tracks the pending timeout, and `startGame()` cancels it before clearing card references.
 
-These behaviors were identified by reading the source; no browser checks have been performed in this conversation. A potential restart bug exists: `startGame()` does not cancel a pending mismatch timeout, which may subsequently access cleared or unrelated card references.
+## Verification and remaining work
 
-The user has explored the project and asked about opening it in IntelliJ IDEA. No feature requirements have been agreed, and no game files have been changed by the assistant. Next, verify gameplay in a browser, reproduce the potential restart bug, and agree on a small improvement with observable acceptance checks.
+Browser checks performed in this chat passed for best-score persistence and improvement rules, invalid/unavailable storage, ordinary matches and mismatches, counters, and blocked third-card selection. Move-feedback checks passed at 15/16/17/18/19 moves, through mismatch delays and completion, and after New game and refresh. Mobile layout was inspected at 375px with no horizontal overflow. JavaScript syntax and Git whitespace checks passed.
+
+The previous handoff also records successful browser regression checks for the restart fix: restarting during a mismatch, selecting cards immediately afterward, overlapping old/new mismatch timing, and repeated quick restarts. Those results are carried forward from that handoff; they were not rerun during this documentation update. The timeout cancellation was verified by reading the current code.
+
+The requested best-score and move-feedback features are implemented. No further feature is agreed. Future changes should preserve these behaviors and rerun relevant browser checks. Temporary Playwright checks are not a committed test suite; no test framework was added. This update changes documentation only and creates no Git commit.
