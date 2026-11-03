@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Little Pairs test</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">A tiny memory game</p>
+        <h1>Little Pairs</h1>
+        <p class="intro">Find all the matching pairs. Take your time.</p>
+      </div>
+      <button id="new-game" class="new-game" type="button">New game</button>
+    </header>
+
+    <section class="status" aria-label="Game status">
+      <div><span class="status-label">Moves</span><strong id="moves">0</strong></div>
+      <div><span class="status-label">Pairs</span><strong id="pairs">0 / 6</strong></div>
+      <p id="message" role="status" aria-live="polite">Choose two cards to begin.</p>
+    </section>
+
+    <section id="board" class="board" aria-label="Memory cards"></section>
+    <p class="footnote">Tip: remember where you saw each picture.</p>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
